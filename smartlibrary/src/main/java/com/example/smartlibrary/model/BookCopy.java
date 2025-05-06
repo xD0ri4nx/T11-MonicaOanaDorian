@@ -4,6 +4,8 @@ import com.example.smartlibrary.model.utils.Status;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Data
@@ -22,6 +24,7 @@ public class BookCopy {
     @Enumerated(EnumType.STRING)
     private Status status = Status.AVAILABLE;
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book;

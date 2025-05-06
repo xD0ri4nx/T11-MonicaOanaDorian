@@ -33,6 +33,7 @@ public class Book {
     private Integer year;
     private Double averageRating;
     private Integer numberOfPages;
+    private Integer numberOfRatings;
 
     @ManyToOne
     @JoinColumn(name = "author_id")

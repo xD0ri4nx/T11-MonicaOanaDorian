@@ -4,7 +4,9 @@ import com.example.smartlibrary.model.Book;
 import com.example.smartlibrary.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,8 +33,16 @@ public class BookService {
         return bookRepository.findByTitleContainingIgnoreCase(title);
     }
 
-    public List<Book> searchByAuthor(String authorName) {
-        return bookRepository.findByAuthorNameContainingIgnoreCase(authorName);
+    public Page<Book> getBooksFiltered(String title, String category, Pageable pageable) {
+        if (title != null && category != null) {
+            return bookRepository.findByTitleContainingIgnoreCaseAndCategoryIgnoreCase(title, category, pageable);
+        } else if (title != null) {
+            return bookRepository.findByTitleContainingIgnoreCase(title, pageable);
+        } else if (category != null) {
+            return bookRepository.findByCategoryIgnoreCase(category, pageable);
+        } else {
+            return bookRepository.findAll(pageable);
+        }
     }
 
     public Book createBook(Book book) {
@@ -41,5 +51,9 @@ public class BookService {
 
     public void deleteBook(Long id) {
         bookRepository.deleteById(id);
+    }
+
+    public List<Book> searchByAuthor(String authorName) {
+        return bookRepository.findByAuthorNameContainingIgnoreCase(authorName);
     }
 }
