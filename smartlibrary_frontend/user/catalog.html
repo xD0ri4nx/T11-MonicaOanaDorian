@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Book Catalog</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div class="nav-logo">📚 Smart Library</div>
+        <ul class="nav-links">
+            <li><a href="/user/dashboard.html">Dashboard</a></li>
+            <li><a href="/user/catalog.html" class="active">Browse Books</a></li>
+            <li><a href="/user/my-loans.html">My Loans</a></li>
+            <li><a href="/user/my-reservations.html">My Reservations</a></li>
+            <li><a href="#" id="logoutBtn">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <h2>📚 Book Catalog</h2>
+
+    <div class="search-bar">
+        <div class="filters-left">
+            <input type="text" id="searchTitle" placeholder="Search by title..." />
+            <select id="searchCategory">
+                <option value="">All Categories</option>
+            </select>
+            <label for="sortSelect">Sort by:</label>
+            <select id="sortSelect">
+                <option value="">Default</option>
+                <option value="title,asc">Title (A–Z)</option>
+                <option value="title,desc">Title (Z–A)</option>
+                <option value="author.name,asc">Author (A–Z)</option>
+                <option value="author.name,desc">Author (Z–A)</option>
+                <option value="averageRating,desc">Best Rated</option>
+                <option value="numberOfRatings,desc">Most Popular</option>
+            </select>
+            <button id="searchBtn" class="btn-primary">Search</button>
+        </div>
+
+        <div class="filters-right">
+            <label for="pageSize">Books per page:</label>
+            <select id="pageSize">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30" selected>30</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div id="bookGrid" class="book-grid"></div>
+    <div id="pagination" class="pagination"></div>
+</main>
+
+
+<script src="../js/catalog.js"></script>
+</body>
+</html>

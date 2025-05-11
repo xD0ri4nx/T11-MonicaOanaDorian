@@ -1,8 +1,9 @@
 package com.example.smartlibrary.controller;
 
 import com.example.smartlibrary.model.Book;
+import com.example.smartlibrary.model.utils.Status;
+import com.example.smartlibrary.service.BookCopyService;
 import com.example.smartlibrary.service.BookService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,15 +11,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
     private final BookService bookService;
+    private final BookCopyService bookCopyService;
 
     @Autowired
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, BookCopyService bookCopyService) {
         this.bookService = bookService;
+        this.bookCopyService = bookCopyService;
     }
 
 
@@ -64,4 +68,34 @@ public class BookController {
         Page<Book> result = bookService.getBooksFiltered(title, category, pageable);
         return ResponseEntity.ok(result);
     }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book updatedBook) {
+        return bookService.updateBook(id, updatedBook)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+
+    @GetMapping("/{id}/availability")
+    public ResponseEntity<Map<String, Long>> getBookAvailability(@PathVariable Long id) {
+        return ResponseEntity.ok(bookCopyService.getAvailabilityPerBranch(id));
+    }
+
+    @GetMapping("/{id}/status-summary")
+    public ResponseEntity<Map<String, Map<Status, Long>>> getStatusStats(@PathVariable Long id) {
+        return ResponseEntity.ok(bookCopyService.getBookStatusStats(id));
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<String>> getCategories() {
+        return ResponseEntity.ok(bookService.getAllCategories());
+    }
+
+    @GetMapping("/{id}/similar")
+    public ResponseEntity<List<Book>> getSimilarBooks(@PathVariable Long id) {
+        return ResponseEntity.ok(bookService.findSimilarBooks(id));
+    }
+
 }

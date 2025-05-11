@@ -56,4 +56,40 @@ public class BookService {
     public List<Book> searchByAuthor(String authorName) {
         return bookRepository.findByAuthorNameContainingIgnoreCase(authorName);
     }
+
+    public Optional<Book> updateBook(Long id, Book updatedBook) {
+        return bookRepository.findById(id).map(book -> {
+            book.setTitle(updatedBook.getTitle());
+            book.setSubtitle(updatedBook.getSubtitle());
+            book.setCategory(updatedBook.getCategory());
+            book.setThumbnail(updatedBook.getThumbnail());
+            book.setDescription(updatedBook.getDescription());
+            book.setYear(updatedBook.getYear());
+            book.setAverageRating(updatedBook.getAverageRating());
+            book.setNumberOfPages(updatedBook.getNumberOfPages());
+            book.setNumberOfRatings(updatedBook.getNumberOfRatings());
+            book.setIsbn(updatedBook.getIsbn());
+            book.setAuthor(updatedBook.getAuthor());
+            return bookRepository.save(book);
+        });
+    }
+
+
+    public List<String> getAllCategories() {
+        return bookRepository.findAllCategories();
+    }
+
+    public List<Book> findSimilarBooks(Long bookId) {
+        Book currentBook = bookRepository.findById(bookId).orElseThrow();
+
+        List<Book> byAuthor = bookRepository.findTop5ByAuthorIdAndIdNot(currentBook.getAuthor().getId(), bookId);
+        if (byAuthor.size() >= 1) {
+            return byAuthor;
+        }
+
+        return bookRepository.findTop5ByCategoryIgnoreCaseAndIdNot(currentBook.getCategory(), bookId);
+    }
+
+
+
 }

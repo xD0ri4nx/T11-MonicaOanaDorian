@@ -55,6 +55,23 @@ public class LoanService {
         return loanRepository.save(loan);
     }
 
+    public Loan createLoan(Long userId, Long copyId, LocalDate borrowDate, LocalDate dueDate, LocalDate returnDate) {
+        User user = userRepository.findById(userId).orElseThrow();
+        BookCopy copy = bookCopyRepository.findById(copyId).orElseThrow();
+
+        copy.setStatus(Status.BORROWED);
+        bookCopyRepository.save(copy);
+
+        Loan loan = new Loan();
+        loan.setUser(user);
+        loan.setBookCopy(copy);
+        loan.setBorrowDate(borrowDate);
+        loan.setDueDate(dueDate);
+        loan.setReturnDate(returnDate);
+
+        return loanRepository.save(loan);
+    }
+
     public Loan returnLoan(Long loanId) {
         Loan loan = loanRepository.findById(loanId).orElseThrow();
         loan.setReturnDate(LocalDate.now());
@@ -64,5 +81,25 @@ public class LoanService {
         bookCopyRepository.save(copy);
 
         return loanRepository.save(loan);
+    }
+
+    public Optional<Loan> returnBook(Long loanId) {
+        return loanRepository.findById(loanId).map(loan -> {
+            loan.setReturnDate(LocalDate.now());
+
+            BookCopy copy = loan.getBookCopy();
+            copy.setStatus(Status.AVAILABLE);
+            bookCopyRepository.save(copy);
+
+            return loanRepository.save(loan);
+        });
+    }
+
+    public List<Loan> getActiveLoansByUser(Long userId) {
+        return loanRepository.findByUserIdAndReturnDateIsNull(userId);
+    }
+
+    public List<Loan> getOverdueLoans() {
+        return loanRepository.findOverdueLoans();
     }
 }

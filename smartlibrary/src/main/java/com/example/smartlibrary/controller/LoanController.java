@@ -1,6 +1,7 @@
 package com.example.smartlibrary.controller;
 
 import com.example.smartlibrary.model.Loan;
+import com.example.smartlibrary.model.dto.LoanRequestDTO;
 import com.example.smartlibrary.service.LoanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +45,41 @@ public class LoanController {
         return ResponseEntity.ok(loanService.createLoan(userId, copyId, days));
     }
 
-    @PutMapping("/{id}/return")
+    @PostMapping("/with-dates")
+    public ResponseEntity<Loan> createLoanWithDates(@RequestBody LoanRequestDTO dto) {
+        return ResponseEntity.ok(
+                loanService.createLoan(
+                        dto.userId(),
+                        dto.copyId(),
+                        dto.borrowDate(),
+                        dto.dueDate(),
+                        dto.returnDate()
+                )
+        );
+    }
+
+    @PutMapping("/{id}/return-v2")
     public ResponseEntity<Loan> returnLoan(@PathVariable Long id) {
         return ResponseEntity.ok(loanService.returnLoan(id));
     }
+
+    @PutMapping("/{id}/return")
+    public ResponseEntity<Loan> returnBook(@PathVariable Long id) {
+        return loanService.returnBook(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/user/{userId}/active")
+    public ResponseEntity<List<Loan>> getActiveLoans(@PathVariable Long userId) {
+        return ResponseEntity.ok(loanService.getActiveLoansByUser(userId));
+    }
+
+
+    @GetMapping("/overdue")
+    public ResponseEntity<List<Loan>> getOverdueLoans() {
+        return ResponseEntity.ok(loanService.getOverdueLoans());
+    }
+
+
 }

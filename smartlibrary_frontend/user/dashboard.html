@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Dashboard - Smart Library</title>
+    <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div class="nav-logo">📚 Smart Library</div>
+        <ul class="nav-links">
+            <li><a href="../user/dashboard.html">Dashboard</a></li>
+            <li><a href="../user/catalog.html">Browse Books</a></li>
+            <li><a href="../user/my-reservations.html">My Reservations</a></li>
+            <li><a href="#" id="logoutBtn">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main id="content">
+    <h2 id="welcome">Welcome!</h2>
+
+    <section id="stats" class="stats-box">
+        <p>Loading stats...</p>
+    </section>
+
+    <section>
+        <h3>📚 Currently Borrowed Books</h3>
+        <div id="activeLoans" class="book-grid"></div>
+    </section>
+
+    <section>
+        <h3>📘 Past Borrowed Books</h3>
+        <div id="pastLoans" class="book-grid"></div>
+    </section>
+</main>
+
+<script src="../user/dashboard.js"></script>
+<script>
+    document.getElementById("logoutBtn")?.addEventListener("click", () => {
+        localStorage.removeItem("user");
+        window.location.href = "/index.html";
+    });
+</script>
+</body>
+</html>

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/authors")
@@ -42,4 +43,10 @@ public class AuthorController {
         authorService.deleteAuthorById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{id}/stats")
+    public ResponseEntity<Map<String, Object>> getAuthorStats(@PathVariable Long id) {
+        return ResponseEntity.ok(authorService.getAuthorStats(id));
+    }
+
 }

@@ -51,4 +51,20 @@ public class BookCopyController {
         bookCopyService.deleteCopy(id);
         return ResponseEntity.noContent().build();
     }
+
+
+    @GetMapping("/available")
+    public ResponseEntity<BookCopy> getAvailableCopy(
+            @RequestParam Long bookId,
+            @RequestParam Long branchId) {
+        return bookCopyService.findAvailableCopy(bookId, branchId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/by-branch-and-book")
+    public ResponseEntity<List<BookCopy>> getCopiesByBookAndBranch(@RequestParam Long bookId, @RequestParam Long branchId) {
+        return ResponseEntity.ok(bookCopyService.getCopiesByBookAndBranch(bookId, branchId));
+    }
+
 }

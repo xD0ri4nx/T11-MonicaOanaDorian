@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Book Details</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div class="nav-logo">📚 Smart Library</div>
+        <ul class="nav-links">
+            <li><a href="../user/dashboard.html">Dashboard</a></li>
+            <li><a href="../user/catalog.html">Browse Books</a></li>
+            <li><a href="../user/my-loans.html">My Loans</a></li>
+            <li><a href="../user/my-reservations.html">My Reservations</a></li>
+            <li><a href="#" id="logoutBtn">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="book-details">
+    <div id="bookContainer"></div>
+    <section id="similarBooksSection">
+        <h3>🔍 Check out similar books</h3>
+        <div id="similarBooks" class="book-grid"></div>
+    </section>
+
+    <div id="loanSection">
+        <h3>📦 Loan this Book</h3>
+        <label for="branchSelect">Choose a branch:</label>
+        <select id="branchSelect"></select>
+
+        <label for="loanDays">Loan duration (days):</label>
+        <select id="loanDays">
+            <option value="1">1</option>
+            <option value="3">3</option>
+            <option value="7">7</option>
+            <option value="14" selected>14</option>
+        </select>
+
+        <button id="loanBtn">Confirm Loan</button>
+        <p id="loanMessage" class="loan-success"></p>
+    </div>
+
+
+
+</main>
+
+<!-- Reservation Modal -->
+<div id="reservationModal" class="modal">
+    <div class="modal-content">
+        <h3>📌 Create Reservation</h3>
+        <p>No available copies at this branch. Would you like to reserve one?</p>
+        <div class="modal-actions">
+            <button id="confirmReservationBtn">Yes, Reserve</button>
+            <button id="cancelReservationBtn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script src="../js/book.js"></script>
+
+
+
+</body>
+</html>
