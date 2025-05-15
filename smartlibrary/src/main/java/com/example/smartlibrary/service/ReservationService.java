@@ -3,12 +3,14 @@ package com.example.smartlibrary.service;
 import com.example.smartlibrary.model.*;
 import com.example.smartlibrary.model.utils.ReservationStatus;
 import com.example.smartlibrary.repository.BookCopyRepository;
+import com.example.smartlibrary.repository.NotificationRepository;
 import com.example.smartlibrary.repository.ReservationRepository;
 import com.example.smartlibrary.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,14 +20,16 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
     private final BookCopyRepository bookCopyRepository;
+    private final NotificationRepository notificationRepository;
 
     @Autowired
     public ReservationService(ReservationRepository reservationRepository,
                               UserRepository userRepository,
-                              BookCopyRepository bookCopyRepository) {
+                              BookCopyRepository bookCopyRepository, NotificationRepository notificationRepository) {
         this.reservationRepository = reservationRepository;
         this.userRepository = userRepository;
         this.bookCopyRepository = bookCopyRepository;
+        this.notificationRepository = notificationRepository;
     }
 
     public List<Reservation> getAllReservations() {
@@ -60,9 +64,26 @@ public class ReservationService {
         reservationRepository.save(reservation);
     }
 
+//    public void completeReservation(Long id) {
+//        Reservation reservation = reservationRepository.findById(id).orElseThrow();
+//        reservation.setStatus(ReservationStatus.COMPLETED);
+//        reservationRepository.save(reservation);
+//    }
+
+
     public void completeReservation(Long id) {
-        Reservation reservation = reservationRepository.findById(id).orElseThrow();
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+
         reservation.setStatus(ReservationStatus.COMPLETED);
         reservationRepository.save(reservation);
+
+        Notification notification = new Notification();
+        notification.setUser(reservation.getUser());
+        notification.setReservation(reservation);
+        notification.setBookCopy(reservation.getBookCopy());
+        notification.setTimestamp(LocalDateTime.now());
+        notificationRepository.save(notification);
     }
+
 }

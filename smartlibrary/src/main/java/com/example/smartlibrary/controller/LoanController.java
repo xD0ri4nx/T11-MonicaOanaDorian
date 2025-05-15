@@ -63,6 +63,7 @@ public class LoanController {
         return ResponseEntity.ok(loanService.returnLoan(id));
     }
 
+
     @PutMapping("/{id}/return")
     public ResponseEntity<Loan> returnBook(@PathVariable Long id) {
         return loanService.returnBook(id)

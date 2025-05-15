@@ -8,6 +8,8 @@ import com.example.smartlibrary.repository.BookCopyRepository;
 import com.example.smartlibrary.repository.BookRepository;
 import com.example.smartlibrary.repository.BranchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -97,6 +99,19 @@ public class BookCopyService {
     public List<BookCopy> getCopiesByBookAndBranch(Long bookId, Long branchId) {
         return bookCopyRepository.findByBookIdAndBranchId(bookId, branchId);
     }
+
+
+    public Page<BookCopy> getCopiesByBranch(Long branchId, Pageable pageable) {
+        return bookCopyRepository.findByBranchId(branchId, pageable);
+    }
+
+    public Optional<BookCopy> updateBookCopyStatus(Long id, Status status) {
+        return bookCopyRepository.findById(id).map(copy -> {
+            copy.setStatus(status);
+            return bookCopyRepository.save(copy);
+        });
+    }
+
 
 
 }

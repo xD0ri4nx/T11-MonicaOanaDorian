@@ -2,6 +2,8 @@ package com.example.smartlibrary.repository;
 
 import com.example.smartlibrary.model.BookCopy;
 import com.example.smartlibrary.model.utils.Status;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -29,6 +31,9 @@ public interface BookCopyRepository extends JpaRepository<BookCopy, Long> {
     Optional<BookCopy> findFirstByBookIdAndBranchIdAndStatus(Long bookId, Long branchId, Status status);
 
     List<BookCopy> findByBookIdAndBranchId(Long bookId, Long branchId);
+
+    Page<BookCopy> findByBranchId(Long branchId, Pageable pageable);
+
 
 
 }

@@ -9,6 +9,11 @@ import com.example.smartlibrary.repository.LoanRepository;
 import com.example.smartlibrary.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.time.YearMonth;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -101,5 +106,48 @@ public class LoanService {
 
     public List<Loan> getOverdueLoans() {
         return loanRepository.findOverdueLoans();
+    }
+
+    public Map<String, Long> getMonthlyLoanStats(LocalDate month) {
+        YearMonth yearMonth = YearMonth.from(month);
+        LocalDate startDate = yearMonth.atDay(1);
+        LocalDate endDate = yearMonth.atEndOfMonth();
+
+        Map<String, Long> stats = new HashMap<>();
+
+        // Total loans
+        long totalLoans = loanRepository.countByBorrowDateBetween(startDate, endDate);
+        stats.put("Total Loans", totalLoans);
+
+        // Completed loans (returned)
+        long completedLoans = loanRepository.countByBorrowDateBetweenAndReturnDateIsNotNull(startDate, endDate);
+        stats.put("Completed Loans", completedLoans);
+
+        // Overdue loans
+        long overdueLoans = loanRepository.countOverdueLoansForMonth(startDate, endDate);
+        stats.put("Overdue Loans", overdueLoans);
+
+        // Active loans (not yet returned)
+        long activeLoans = loanRepository.countByBorrowDateBetweenAndReturnDateIsNull(startDate, endDate);
+        stats.put("Active Loans", activeLoans);
+
+        return stats;
+    }
+
+    public List<Map<String, Object>> getOverdueLoansForMonth(LocalDate month) {
+        YearMonth yearMonth = YearMonth.from(month);
+        LocalDate startDate = yearMonth.atDay(1);
+        LocalDate endDate = yearMonth.atEndOfMonth();
+
+        return loanRepository.findOverdueLoansForMonth(startDate, endDate).stream()
+                .map(loan -> {
+                    Map<String, Object> loanData = new HashMap<>();
+                    loanData.put("bookTitle", loan.getBookCopy().getBook().getTitle());
+                    loanData.put("userName", loan.getUser().getName());
+                    loanData.put("dueDate", loan.getDueDate().toString());
+                    loanData.put("daysOverdue", LocalDate.now().getDayOfYear() - loan.getDueDate().getDayOfYear());
+                    return loanData;
+                })
+                .collect(Collectors.toList());
     }
 }

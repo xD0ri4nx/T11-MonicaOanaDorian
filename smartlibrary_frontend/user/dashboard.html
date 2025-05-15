@@ -14,6 +14,15 @@
             <li><a href="../user/dashboard.html">Dashboard</a></li>
             <li><a href="../user/catalog.html">Browse Books</a></li>
             <li><a href="../user/my-reservations.html">My Reservations</a></li>
+
+            <li class="notification-badge">
+            <a href="../user/notifications.html" id="notificationIconLink">
+                    🔔 <span id="notificationCount" class="badge hidden"></span>
+                </a>
+            </li>
+
+
+
             <li><a href="#" id="logoutBtn">Logout</a></li>
         </ul>
     </nav>
@@ -38,11 +47,49 @@
 </main>
 
 <script src="../user/dashboard.js"></script>
+
+
 <script>
-    document.getElementById("logoutBtn")?.addEventListener("click", () => {
-        localStorage.removeItem("user");
-        window.location.href = "/index.html";
+    document.addEventListener("DOMContentLoaded", () => {
+        const user = JSON.parse(localStorage.getItem("user"));
+
+        if (!user || user.role !== "READER") {
+            window.location.href = "/index.html";
+            return;
+        }
+
+        document.getElementById("welcome").textContent = `Welcome, ${user.name}!`;
+
+        document.getElementById("logoutBtn")?.addEventListener("click", () => {
+            localStorage.removeItem("user");
+            window.location.href = "/index.html";
+        });
+
+        async function fetchUnreadNotificationCount() {
+            try {
+                const res = await fetch(`http://localhost:8080/api/notifications/user/${user.id}`);
+                const notifications = await res.json();
+                const unread = notifications.filter(n => !n.read);
+
+                const badge = document.getElementById("notificationCount");
+                if (badge && unread.length > 0) {
+                    badge.textContent = unread.length;
+                    badge.classList.remove("hidden");
+                } else {
+                    badge?.classList.add("hidden");
+                }
+            } catch (err) {
+                console.error("Failed to fetch notifications:", err);
+            }
+        }
+
+        fetchUnreadNotificationCount();
     });
 </script>
+
+
 </body>
 </html>
+
+
+

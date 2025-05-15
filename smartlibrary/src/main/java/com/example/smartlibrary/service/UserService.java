@@ -5,7 +5,11 @@ import com.example.smartlibrary.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -49,4 +53,26 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+
+    public Map<String, Long> getUserActivityStats(LocalDate month) {
+        YearMonth yearMonth = YearMonth.from(month);
+        LocalDate startDate = yearMonth.atDay(1);
+        LocalDate endDate = yearMonth.atEndOfMonth();
+
+        Map<String, Long> stats = new HashMap<>();
+
+        // Total active users (users with at least one loan)
+        long activeUsers = userRepository.countActiveUsers(startDate, endDate);
+        stats.put("Active Users", activeUsers);
+
+        // New registrations
+        long newUsers = userRepository.countByCreatedAtBetween(startDate, endDate);
+        stats.put("New Users", newUsers);
+
+        // Inactive users (registered but no activity)
+        long inactiveUsers = userRepository.countInactiveUsers(startDate, endDate);
+        stats.put("Inactive Users", inactiveUsers);
+
+        return stats;
+    }
 }

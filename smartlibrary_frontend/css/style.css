@@ -403,3 +403,106 @@ main {
 .return-btn:hover {
     background-color: #2980b9;
 }
+
+
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.styled-table th, .styled-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+.styled-table img {
+    max-height: 100px;
+}
+
+.styled-table button {
+    margin-right: 8px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+
+.notifications-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 1rem;
+}
+
+.notification {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 5px;
+    background-color: #fffbe6;
+}
+
+.notification.read {
+    background-color: #f0f0f0;
+}
+
+.notification button {
+    margin-top: 10px;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+/* Notification Badge Styling */
+.badge {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    position: relative;
+    top: -8px;
+    left: -4px;
+}
+
+.hidden {
+    display: none;
+}
+
+.notifications-list {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.notification {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.notification.unread {
+    background-color: #f8f9fa;
+}
+
+.notif-thumb {
+    width: 50px;
+    height: 70px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.notif-details {
+    flex-grow: 1;
+}
+
+.mark-read-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+

@@ -15,8 +15,13 @@ document.getElementById('loginForm').addEventListener('submit', async function (
 
         // Role-based redirect
         if (user.role === 'ADMIN') {
+            localStorage.setItem("user", JSON.stringify(user));
             window.location.href = "/admin/admin.html";
+        } else if (user.role === 'LIBRARIAN') {
+            localStorage.setItem("user", JSON.stringify(user));
+            window.location.href = "/librarian/dashboard.html";
         } else if (user.role === 'READER') {
+            localStorage.setItem("user", JSON.stringify(user));
             window.location.href = "/user/dashboard.html";
         } else {
             document.getElementById('error').textContent = "Unknown role or unauthorized access.";

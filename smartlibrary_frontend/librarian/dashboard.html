@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Librarian Dashboard</title>
+    <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div class="nav-logo">📚 Smart Library</div>
+        <ul class="nav-links">
+            <li><a href="/librarian/dashboard.html" class="active">Dashboard</a></li>
+            <li><a href="#" id="logoutBtn">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <h2>📘 Librarian Dashboard</h2>
+
+    <label for="branchSelect">Select Branch:</label>
+    <select id="branchSelect"></select>
+
+    <table id="copyTable" class="styled-table">
+        <thead>
+        <tr>
+            <th>Image</th>
+            <th>Copy ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div id="pagination" class="pagination"></div>
+
+
+</main>
+
+<script src="../js/librarian-dashboard.js"></script>
+</body>
+</html>
